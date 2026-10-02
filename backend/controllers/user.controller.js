@@ -19,7 +19,7 @@ export const updateName = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        if (user.isOAuthUser) {
+        if (user.googleId && !user.password) {
             return res.status(403).json({ message: "OAuth users cannot update their name" });
         }
 
@@ -84,7 +84,7 @@ export const updateEmail = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-        if (user.isOAuthUser) {
+        if (user.googleId && !user.password) {
             return res.status(403).json({ message: "OAuth users cannot update their email" });
         }
 

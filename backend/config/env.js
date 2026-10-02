@@ -16,7 +16,7 @@ function optional(key, defaultValue) {
 
 export const ENV = {
     PORT:                   optional('PORT', 5000),
-    CLIENT_URL:             required('CLIENT_URL'),
+    CLIENT_URL:             optional('CLIENT_URL', process.env.URL),
     JWT_SECRET:             required('JWT_SECRET'),
     MONGODB_URI:            required('MONGODB_URI'),
     CLOUDINARY_CLOUD_NAME:  required('CLOUDINARY_CLOUD_NAME'),
@@ -24,4 +24,6 @@ export const ENV = {
     CLOUDINARY_API_SECRET:  required('CLOUDINARY_API_SECRET'),
     BREVO_API_KEY:          required('BREVO_API_KEY'),
     EMAIL_SENDER:           required('EMAIL_SENDER'),
+    GOOGLE_CLIENT_ID:       optional('GOOGLE_CLIENT_ID', process.env.VITE_OAUTH_CLIENT_ID),
+    NODE_ENV:               optional('NODE_ENV', 'development'),
 }
