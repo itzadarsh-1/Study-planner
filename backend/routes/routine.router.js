@@ -11,10 +11,10 @@ import protectedRoute from "../middlewares/protected.middleware.js";
 const router = express.Router();
 router.use(protectedRoute);
 
-router.post("/", addRoutine);
+router.post("/:day", addRoutine);
 router.get("/", getRoutines);
 router.get("/:id", getRoutineById);
-router.put("/:id", updateRoutine);
-router.delete("/:id", deleteRoutine);
+router.put("/:day/:index", updateRoutine);
+router.delete("/:day/:index", deleteRoutine);
 
 export default router;
