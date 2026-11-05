@@ -42,10 +42,10 @@ const images = [
 ]
 
 const data = [
-  { title: "Daily", path: '/weekly-task', image: "./cover7.jpg", date: "Nov 3, 2025" },
-  { title: "Weekly", path: '/weekly-task', image: "./cover8.jpg", date: "Nov 3–9, 2025" },
-  { title: "Monthly", path: '/weekly-task', image: "./cover3.jpg", date: "November 2025" },
-]
+  { title: "Daily", path: "/daily-task", image: "./cover7.jpg", date: "Nov 3, 2025" },
+  { title: "Weekly", path: "/weekly-task", image: "./cover8.jpg", date: "Nov 3–9, 2025" },
+  { title: "Monthly", path: "/monthly-task", image: "./cover3.jpg", date: "November 2025" },
+];
 
 const HomePage = () => {
   const { authUser } = useAuthStore()

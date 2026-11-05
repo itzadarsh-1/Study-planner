@@ -11,7 +11,7 @@ export const sendEmail = async (email, subject, text, html) => {
       },
       body: JSON.stringify({
         sender: {
-          name: "NoteHub",
+          name: "Study Planner",
           email: ENV.EMAIL_SENDER, 
         },
         to: [{ email }],

@@ -124,7 +124,7 @@
   }
   .link,
   .prose a {
-    @apply dark:text-[#7ab7ff] dark:hover:text-[#5e83b3] text-[#2964aa] hover:text-[#749ac8];
+    @apply dark:text-[#7ab7ff] dark:hover:text-[#5e83b3] text-[#2964aa] hover:text-[749ac8];
   }
   .prose a {
     word-break: break-all;

@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.router.js';
 import userRouter from './routes/user.router.js';
 import passwordRouter from './routes/password.router.js';
 import routineRouter from './routes/routine.router.js';
+import dailyTaskRouter from './routes/dailyTask.router.js';
 import noteRouter from './routes/note.router.js';
 import { ENV } from './config/env.js';
 
@@ -39,6 +40,7 @@ app.use('/api/health', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRouter);
+app.use('/api/daily-tasks', dailyTaskRouter);
 app.use('/api/password', passwordRouter);
 app.use('/api/routines', routineRouter);
 app.use('/api/notes', noteRouter);
