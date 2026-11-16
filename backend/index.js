@@ -11,33 +11,66 @@ import dailyTaskRouter from './routes/dailyTask.router.js';
 import noteRouter from './routes/note.router.js';
 import { ENV } from './config/env.js';
 
-
 const app = express();
-const PORT = ENV.PORT || 5000;
+const PORT = ENV.PORT || process.env.PORT || 5000;
+
+const allowedOrigins = [
+  ENV.CLIENT_URL,
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:3000',
+].filter(Boolean).map((url) => url.replace(/\/$/, ''));
 
 app.use(cors({
-  origin: [
-    ENV.CLIENT_URL,           // live
-    'http://localhost:5173',  // react js
-    'http://localhost:5174',  // react js fallback 
-    'http://localhost:3000',  // next js
-  ],
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
 }));
+
 app.use(cookieParser());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.status(200).json({ message: "Hello from server" });
-});
-
-app.use('/api/health', (req, res) => {
   res.status(200).json({
-    message: `server is running`,
-    success: true,
-  })
+    message: 'Hello from server',
+  });
 });
 
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    message: 'Server is running',
+    success: true,
+  });
+});
+
+// Database connection
+let dbPromise = null;
+
+app.use('/api', async (req, res, next) => {
+  try {
+    if (!dbPromise) {
+      dbPromise = Promise.resolve().then(() => connectDB());
+    }
+
+    await dbPromise;
+    next();
+  } catch (error) {
+    dbPromise = null;
+    console.error('Database connection failed:', error);
+
+    res.status(503).json({
+      success: false,
+      message: 'Database unavailable',
+    });
+  }
+});
+
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRouter);
 app.use('/api/daily-tasks', dailyTaskRouter);
@@ -45,7 +78,11 @@ app.use('/api/password', passwordRouter);
 app.use('/api/routines', routineRouter);
 app.use('/api/notes', noteRouter);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  connectDB();
-});
+// Local development only
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+export default app;

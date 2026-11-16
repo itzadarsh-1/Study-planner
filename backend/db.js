@@ -1,20 +1,38 @@
 import mongoose from "mongoose";
-import ora from "ora";
 import { ENV } from "./config/env.js";
-import dns from "dns";
 
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
+let connectionPromise = null;
 
 const connectDB = async () => {
-    const spinner = ora("Connecting to MongoDB...").start();
-    try {
-        const conn = await mongoose.connect(ENV.MONGODB_URI);
-        spinner.succeed(`MongoDB Connected: ${conn.connection.host}`);
-    } catch (error) {
-        spinner.fail("Error connecting to MongoDB");
-        console.error("Error connecting to MongoDB:", error);
-        process.exit(1);
-    }
-}
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
+  }
+
+  if (!ENV.MONGODB_URI) {
+    throw new Error("MONGODB_URI is missing");
+  }
+
+  if (!connectionPromise) {
+    connectionPromise = mongoose
+      .connect(ENV.MONGODB_URI, {
+        serverSelectionTimeoutMS: 10000,
+      })
+      .then((mongooseInstance) => {
+        console.log(
+          "MongoDB Connected:",
+          mongooseInstance.connection.host
+        );
+
+        return mongooseInstance.connection;
+      })
+      .catch((error) => {
+        connectionPromise = null;
+        console.error("MongoDB connection failed:", error);
+        throw error;
+      });
+  }
+
+  return connectionPromise;
+};
 
 export default connectDB;
