@@ -16,6 +16,7 @@ function optional(key, defaultValue) {
 
 export const ENV = {
     PORT:                   optional('PORT', 5000),
+    NODE_ENV:               optional('NODE_ENV', 'development'),
     CLIENT_URL:             required('CLIENT_URL'),
     JWT_SECRET:             required('JWT_SECRET'),
     MONGODB_URI:            required('MONGODB_URI'),
